@@ -1,0 +1,39 @@
+img {
+    width: 400px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+body {
+    background-color: #f4f4f9; 
+    color: #333;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    color: #4b8b3b; 
+}
+
+header {
+    background-color: #4b8b3b;
+    color: white;  
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;  
+    border-bottom: 4px solid #333;  
+}
+
+footer {
+    background-color: #333;
+    color: white; 
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
