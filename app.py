@@ -323,3 +323,40 @@ def show_books():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+# Список котиков
+cats = [
+    {
+        'name': 'Барсик',
+        'description': 'Милый котик',
+        'image': 'cats:1.jpeg'
+    },
+    {
+        'name': 'Мурзик',
+        'description': 'Дружелюбный кот',
+        'image': 'cats:2.jpeg'
+    },
+    {
+        'name': 'Вася',
+        'description': 'Активный кот',
+        'image': 'cats:3.jpeg'
+    },
+    {
+        'name': 'Снежок',
+        'description': 'Кот-лежебока',
+        'image': 'cats:4.jpeg'
+    },
+    {
+        'name': 'Пушок',
+        'description': 'Ласковый кот',
+        'image': 'cats:5.jpeg'
+    }
+]
+
+# Маршрут для вывода всех котиков
+@app.route('/lab2/cats')
+def show_cats():
+    return render_template('cats.html', cats=cats)
+
+if __name__ == "__main__":
+    app.run(debug=True)
