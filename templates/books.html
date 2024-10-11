@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Русская классика - Драма</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+    <h1>Список книг: Русская классика - Драма</h1>
+    <table border="1">
+      <tr>
+        <th>Автор</th>
+        <th>Название</th>
+        <th>Жанр</th>
+        <th>Количество страниц</th>
+      </tr>
+      {% for book in books %}
+      <tr>
+        <td>{{ book.author }}</td>
+        <td>{{ book.title }}</td>
+        <td>{{ book.genre }}</td>
+        <td>{{ book.pages }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>

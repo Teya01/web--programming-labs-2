@@ -301,3 +301,25 @@ def calc_with_one(a):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+# Список книг на стороне сервера
+books = [
+    {'author': 'Лев Толстой', 'title': 'Война и мир', 'genre': 'Драма', 'pages': 1225},
+    {'author': 'Фёдор Достоевский', 'title': 'Преступление и наказание', 'genre': 'Драма', 'pages': 671},
+    {'author': 'Антон Чехов', 'title': 'Три сестры', 'genre': 'Драма', 'pages': 152},
+    {'author': 'Александр Островский', 'title': 'Гроза', 'genre': 'Драма', 'pages': 124},
+    {'author': 'Михаил Булгаков', 'title': 'Мастер и Маргарита', 'genre': 'Драма', 'pages': 480},
+    {'author': 'Иван Тургенев', 'title': 'Отцы и дети', 'genre': 'Драма', 'pages': 320},
+    {'author': 'Александр Грибоедов', 'title': 'Горе от ума', 'genre': 'Драма', 'pages': 225},
+    {'author': 'Николай Гоголь', 'title': 'Ревизор', 'genre': 'Драма', 'pages': 145},
+    {'author': 'Алексей Толстой', 'title': 'Пётр Первый', 'genre': 'Драма', 'pages': 767},
+    {'author': 'Максим Горький', 'title': 'На дне', 'genre': 'Драма', 'pages': 175}
+]
+
+# Обработчик для отображения списка книг
+@app.route('/lab2/books')
+def show_books():
+    return render_template('books.html', books=books)
+
+if __name__ == "__main__":
+    app.run(debug=True)
