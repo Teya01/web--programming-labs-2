@@ -183,8 +183,14 @@ app = Flask(__name__)
 
 @app.route('/lab2/example')
 def example():
-    name = 'Адалинская Тэя'
-    lab_num = '2'
-    group = 'ФБИ-24'
-    course = '3 курс'
-    return render_template('example.html', lab_naum = lab_num)
+    name, lab_num, group, course = 'Адалинская Тэя', 2, 'ФБИ-24', 3
+    fruits = [
+        {'name': 'яблоки', 'price': 100},
+        {'name': 'груши', 'price': 120},
+        {'name': 'апельсины', 'price': 80},
+        {'name': 'мандарины', 'price': 95},
+        {'name': 'манго', 'price': 321}
+    ]
+    return render_template('example.html',
+                           name=name, lab_num=lab_num, group=group,
+                           course=course, fruits=fruits)
