@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Адалинская Тэя. {% block lab %}{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.jpeg') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 </head>
 <body>
     <header>
-        WEB-программирование, часть 2. {{ self.lab() }}
+        WEB-программирование, часть 2. {% block lab_name %}{% endblock %}
         <a href="{{ url_for('index') }}">Главное меню</a> |
         <a href="{{ url_for('lab2') }}">Вторая лабораторная</a>
     </header>
