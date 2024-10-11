@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список цветов</title>
+</head>
+<body>
+    <h1>Список цветов</h1>
+    <table border="1">
+        <tr>
+            <th>Название цветка</th>
+            <th>Цена</th>
+            <th>Действия</th>
+        </tr>
+        {% for flower in flowers %}
+        <tr>
+            <td>{{ flower.name }}</td>
+            <td>{{ flower.price }} руб.</td>
+            <td>
+                <a href="{{ url_for('delete_flower', flower_id=loop.index0) }}">Удалить</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    <h2>Добавить новый цветок</h2>
+    <form action="{{ url_for('add_flower') }}" method="post">
+        <label for="name">Название:</label>
+        <input type="text" name="name" required>
+        <label for="price">Цена:</label>
+        <input type="number" name="price" required>
+        <button type="submit">Добавить цветок</button>
+    </form>
+
+    <h2>Очистить список цветов</h2>
+    <form action="{{ url_for('clear_flowers') }}">
+        <button type="submit">Удалить все цветы</button>
+    </form>
+</body>
+</html>
