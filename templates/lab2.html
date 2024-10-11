@@ -12,4 +12,11 @@
             <a href="/lab2/example">example</a>
         </li>
     </ol>
+    <h2>Вторая лабораторная</h2>
+    <ul>
+        <li><a href="{{ url_for('show_cats') }}">Котики</a></li>
+        <li><a href="{{ url_for('show_books') }}">Список книг (русская классика)</a></li>
+        <li><a href="{{ url_for('all_flowers') }}">Список цветов</a></li>
+        <li><a href="{{ url_for('clear_flowers') }}">Очистить список цветов</a></li>
+    </ul>
 {% endblock %}

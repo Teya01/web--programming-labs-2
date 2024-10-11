@@ -240,6 +240,8 @@ def bad_request(error):
     ''', 400
 
 @app.route("/")
+def index():
+    return render_template('index.html')
 
 @app.route('/lab2/example')
 def example():
@@ -360,3 +362,4 @@ def show_cats():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
