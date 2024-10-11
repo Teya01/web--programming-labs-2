@@ -184,4 +184,8 @@ app = Flask(__name__)
 @app.route('/lab2/example')
 def example():
     name = 'Пётр Петров'
-    return render_template('example.html', name=name)
+    number1 = '2'
+    number2 = '2'
+    group = 'ФБИ-24'
+    course = '3 курс'
+    return render_template('example.html', name=name, number1=number1, number2=number2, group=group, course = course)
