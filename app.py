@@ -263,3 +263,41 @@ def lab2():
 def filters():
     phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
     return render_template('filter.html', phrase = phrase)
+
+# Выполнение математических операций с двумя числами
+@app.route('/lab2/calc/<int:a>/<int:b>')
+def calc(a, b):
+    try:
+        result_sum = a + b
+        result_sub = a - b
+        result_mul = a * b
+        result_div = a / b if b != 0 else 'деление на ноль невозможно'
+        result_pow = a ** b
+        return f'''
+        <!doctype html>
+        <html>
+            <body>
+                <h1>Математические операции с {a} и {b}</h1>
+                <p>Сложение: {a} + {b} = {result_sum}</p>
+                <p>Вычитание: {a} - {b} = {result_sub}</p>
+                <p>Умножение: {a} * {b} = {result_mul}</p>
+                <p>Деление: {a} / {b} = {result_div}</p>
+                <p>Возведение в степень: {a} ** {b} = {result_pow}</p>
+            </body>
+        </html>
+        '''
+    except Exception as e:
+        return f"Ошибка: {str(e)}", 400
+
+# Перенаправление с /lab2/calc/ на /lab2/calc/1/1
+@app.route('/lab2/calc/')
+def calc_default():
+    return redirect(url_for('calc', a=1, b=1))
+
+# Перенаправление с /lab2/calc/<int:a> на /lab2/calc/a/1
+@app.route('/lab2/calc/<int:a>')
+def calc_with_one(a):
+    return redirect(url_for('calc', a=a, b=1))
+
+if __name__ == "__main__":
+    app.run(debug=True)
