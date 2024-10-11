@@ -152,32 +152,92 @@ def a():
 def a2():
     return 'со слэшем'
 
+from flask import Flask, redirect, url_for, render_template, abort
+
+app = Flask(__name__)
+
+# Изначальный список цветов
 flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
 
+# Вывод конкретного цветка
 @app.route('/lab2/flowers/<int:flower_id>')
 def flowers(flower_id):
     if flower_id >= len(flower_list):
         return "такого цветка нет", 404
     else:
-        return "цветок: " + flower_list[flower_id]
+        flower_name = flower_list[flower_id]
+        return f'''
+        <!doctype html>
+        <html>
+            <body>
+                <h1>Цветок: {flower_name}</h1>
+                <a href="{url_for('all_flowers')}">Посмотреть все цветы</a>
+            </body>
+        </html>
+        '''
 
+# Добавление нового цветка с обработкой ошибки 400
+@app.route('/lab2/add_flower/')
 @app.route('/lab2/add_flower/<name>')
-def add_flower(name):
-    flower_list.append(name) #Добавление имени цветка к общему списку
+def add_flower(name=None):
+    if not name:
+        abort(400, description="Вы не задали имя цветка")
+    flower_list.append(name)
     return f'''
-<!doctype html>
-<html>
-    <body>
-    <h1>Добавлен новый цветок</h1>
-    <p>Название нового цветка: {name} </p>
-    <p>Всего цветов: {len(flower_list)}</p>
-    <p>Полный список: {flower_list}<p>
-    </body>
-</html>
-'''
+    <!doctype html>
+    <html>
+        <body>
+            <h1>Добавлен новый цветок</h1>
+            <p>Название нового цветка: {name}</p>
+            <p>Всего цветов: {len(flower_list)}</p>
+            <a href="{url_for('all_flowers')}">Посмотреть все цветы</a>
+        </body>
+    </html>
+    '''
 
-from flask import Flask, redirect, url_for, render_template
-app = Flask(__name__)
+# Вывод всех цветов и их количества
+@app.route('/lab2/flowers')
+def all_flowers():
+    flower_names = ', '.join(flower_list)
+    return f'''
+    <!doctype html>
+    <html>
+        <body>
+            <h1>Все цветы</h1>
+            <p>Количество цветов: {len(flower_list)}</p>
+            <p>{flower_names}</p>
+            <a href="{url_for('clear_flowers')}">Очистить список</a>
+        </body>
+    </html>
+    '''
+
+# Очистка списка цветов
+@app.route('/lab2/clear_flowers')
+def clear_flowers():
+    flower_list.clear()
+    return f'''
+    <!doctype html>
+    <html>
+        <body>
+            <h1>Список цветов очищен</h1>
+            <a href="{url_for('all_flowers')}">Посмотреть все цветы</a>
+        </body>
+    </html>
+    '''
+
+# Обработчик ошибки 400
+@app.errorhandler(400)
+def bad_request(error):
+    return f'''
+    <!doctype html>
+    <html>
+        <body>
+            <h1>Ошибка 400</h1>
+            <p>{error.description}</p>
+            <a href="{url_for('all_flowers')}">Вернуться к списку цветов</a>
+        </body>
+    </html>
+    ''', 400
 
 @app.route("/")
 
