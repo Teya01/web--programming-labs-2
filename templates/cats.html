@@ -2,15 +2,15 @@
 
 {% block title %}Котики{% endblock %}
 
-{% block content %}
+{% block main %}
   <h1>Котики</h1>
   <div style="display: flex; flex-wrap: wrap;">
     {% for cat in cats %}
-    <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; width: 200px;">
-      <img src="{{ url_for('static', filename=cat.image) }}" alt="{{ cat.name }}" style="width: 100%;">
-      <h2>{{ cat.name }}</h2>
-      <p>{{ cat.description }}</p>
-    </div>
+      <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; width: 200px;">
+        <img src="{{ url_for('static', filename=cat.image) }}" alt="{{ cat.name }}" style="width: 100%;">
+        <h2>{{ cat.name }}</h2>
+        <p>{{ cat.description }}</p>
+      </div>
     {% endfor %}
   </div>
 {% endblock %}

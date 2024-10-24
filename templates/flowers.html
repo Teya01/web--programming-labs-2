@@ -17,14 +17,14 @@
             <td>{{ flower.name }}</td>
             <td>{{ flower.price }} руб.</td>
             <td>
-                <a href="{{ url_for('delete_flower', flower_id=loop.index0) }}">Удалить</a>
+                <a href="{{ url_for('lab2.delete_flower', flower_id=loop.index0) }}">Удалить</a>
             </td>
         </tr>
         {% endfor %}
     </table>
     
     <h2>Добавить новый цветок</h2>
-    <form action="{{ url_for('add_flower') }}" method="post">
+    <form action="{{ url_for('lab2.add_flower') }}" method="post">
         <label for="name">Название:</label>
         <input type="text" name="name" required>
         <label for="price">Цена:</label>
@@ -33,7 +33,7 @@
     </form>
 
     <h2>Очистить список цветов</h2>
-    <form action="{{ url_for('clear_flowers') }}">
+    <form action="{{ url_for('lab2.clear_flowers') }}">
         <button type="submit">Удалить все цветы</button>
     </form>
 </body>
