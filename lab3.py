@@ -177,3 +177,43 @@ def ticket():
 @lab3.route('/lab3/ticket')
 def ticket_form():
     return render_template('lab3/ticket.html')
+
+
+books = [
+    {"title": "Book A", "price": 150, "color": "blue", "pages": 300},
+    {"title": "Book B", "price": 200, "color": "red", "pages": 250},
+    {"title": "Book C", "price": 120, "color": "green", "pages": 400},
+    {"title": "Book D", "price": 80, "color": "yellow", "pages": 150},
+    {"title": "Book E", "price": 300, "color": "blue", "pages": 350},
+    {"title": "Book F", "price": 250, "color": "red", "pages": 280},
+    {"title": "Book G", "price": 90, "color": "green", "pages": 220},
+    {"title": "Book H", "price": 160, "color": "yellow", "pages": 310},
+    {"title": "Book I", "price": 110, "color": "blue", "pages": 260},
+    {"title": "Book J", "price": 180, "color": "red", "pages": 370},
+    {"title": "Book K", "price": 230, "color": "green", "pages": 330},
+    {"title": "Book L", "price": 140, "color": "yellow", "pages": 290},
+    {"title": "Book M", "price": 210, "color": "blue", "pages": 200},
+    {"title": "Book N", "price": 170, "color": "red", "pages": 360},
+    {"title": "Book O", "price": 190, "color": "green", "pages": 240},
+    {"title": "Book P", "price": 220, "color": "yellow", "pages": 270},
+    {"title": "Book Q", "price": 130, "color": "blue", "pages": 250},
+    {"title": "Book R", "price": 240, "color": "red", "pages": 340},
+    {"title": "Book S", "price": 100, "color": "green", "pages": 230},
+    {"title": "Book T", "price": 280, "color": "yellow", "pages": 390}
+]
+
+
+@lab3.route('/lab3/books', methods=['GET', 'POST'])
+def books_view():
+    filtered_books = []
+    min_price = request.form.get('min_price')
+    max_price = request.form.get('max_price')
+
+    
+    if request.method == 'POST' and min_price.isdigit() and max_price.isdigit():
+        min_price = int(min_price)
+        max_price = int(max_price)
+        filtered_books = [book for book in books if min_price <= book["price"] <= max_price]
+
+    return render_template('lab3/books.html', books=filtered_books, min_price=min_price, max_price=max_price)
+

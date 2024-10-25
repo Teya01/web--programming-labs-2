@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+    <h1>Поиск книг по цене</h1>
+
+    <form method="POST">
+        <label for="min_price">Мин. цена:</label>
+        <input type="number" id="min_price" name="min_price" value="{{ min_price or '' }}" required>
+
+        <label for="max_price">Макс. цена:</label>
+        <input type="number" id="max_price" name="max_price" value="{{ max_price or '' }}" required>
+
+        <button type="submit">Искать</button>
+    </form>
+
+    {% if books %}
+        <h2>Результаты поиска</h2>
+        <ul>
+            {% for book in books %}
+                <li>
+                    <strong>{{ book.title }}</strong> - {{ book.price }} руб., цвет: {{ book.color }}, страниц: {{ book.pages }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% elif min_price and max_price %}
+        <p>Книги в заданном ценовом диапазоне не найдены.</p>
+    {% endif %}
+{% endblock %}
+
