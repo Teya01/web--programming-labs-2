@@ -20,7 +20,7 @@ flower_list = [
 # Обработчик для отображения всех цветов
 @lab2.route('/lab2/flowers')
 def all_flowers():
-    return render_template('flowers.html', flowers=flower_list)
+    return render_template('lab2/flowers.html', flowers=flower_list)
 
 # Обработчик для добавления нового цветка
 @lab2.route('/lab2/add_flower', methods=['POST'])
@@ -57,7 +57,7 @@ def example():
         {'name': 'мандарины', 'price': 95},
         {'name': 'манго', 'price': 321}
     ]
-    return render_template('example.html',
+    return render_template('lab2/example.html',
                            name=name, lab_num=lab_num, group=group,
                            course=course, fruits=fruits)
 
@@ -68,7 +68,7 @@ def lab():
 @lab2.route('/lab2/filters')
 def filters():
     phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
-    return render_template('filter.html', phrase = phrase)
+    return render_template('lab2/filter.html', phrase = phrase)
 
 # Выполнение математических операций с двумя числами
 @lab2.route('/lab2/calc/<int:a>/<int:b>')
@@ -123,7 +123,7 @@ books = [
 # Обработчик для отображения списка книг
 @lab2.route('/lab2/books')
 def show_books():
-    return render_template('books.html', books=books)
+    return render_template('lab2/books.html', books=books)
 
 
 # Список котиков
@@ -131,32 +131,32 @@ cats = [
     {
         'name': 'Барсик',
         'description': 'Милый котик',
-        'image': 'cats:1.jpeg'
+        'image': 'lab2/cats:1.jpeg'
     },
     {
         'name': 'Мурзик',
         'description': 'Дружелюбный кот',
-        'image': 'cats:2.jpeg'
+        'image': 'lab2/cats:2.jpeg'
     },
     {
         'name': 'Вася',
         'description': 'Активный кот',
-        'image': 'cats:3.jpeg'
+        'image': 'lab2/cats:3.jpeg'
     },
     {
         'name': 'Снежок',
         'description': 'Кот-лежебока',
-        'image': 'cats:4.jpeg'
+        'image': 'lab2/cats:4.jpeg'
     },
     {
         'name': 'Пушок',
         'description': 'Ласковый кот',
-        'image': 'cats:5.jpeg'
+        'image': 'lab2/cats:5.jpeg'
     }
 ]
 
 # Маршрут для вывода всех котиков
 @lab2.route('/lab2/cats')
 def show_cats():
-    return render_template('cats.html', cats=cats)
+    return render_template('lab2/cats.html', cats=cats)
 

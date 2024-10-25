@@ -4,9 +4,11 @@ lab3 = Blueprint('lab3', __name__)
 
 @lab3.route('/lab3/')
 def lab():
-    name = request.cookies.get('name')
+    name = request.cookies.get('name', 'аноним')
     name_color = request.cookies.get('name_color')
-    return render_template('lab3/lab3.html', name=name, name_color=name_color)
+    age = request.cookies.get('age', 'неизвестен')
+
+    return render_template('lab3/lab3.html', name=name, name_color=name_color, age=age)
 
 
 @lab3.route('/lab3/cookie')
@@ -81,14 +83,13 @@ def settings():
     font_size = request.args.get('font_size')
     text_style = request.args.get('text_style')
 
-    # Create the response for rendering the page
+
     resp = make_response(render_template('lab3/settings.html', 
                                          color=request.cookies.get('color'), 
                                          background=request.cookies.get('background'), 
                                          font_size=request.cookies.get('font_size'), 
                                          text_style=request.cookies.get('text_style')))
 
-    # Set cookies if new values are provided
     if color:
         resp.set_cookie('color', color)
     if background:

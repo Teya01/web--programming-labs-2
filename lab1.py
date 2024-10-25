@@ -9,7 +9,7 @@ def lab():
     <html>
         <head>
             <title>НГТУ, ФБ, Лабораторная работа 1</title>
-            <link rel="stylesheet" href="''' + url_for('static', filename='lab1.css') + '''">
+            <link rel="stylesheet" href="''' + url_for('static', filename='lab1/lab1.css') + '''">
         </head>
         <body>
             <header>
@@ -43,11 +43,11 @@ def oak():
 <!doctype html>
 <html>
     <head>
-        <link rel="stylesheet" href="''' + url_for('static', filename='lab1.css') + '''">
+        <link rel="stylesheet" href="''' + url_for('static', filename='lab1/lab1.css') + '''">
     </head>
     <body>
         <h1>Дуб</h1>
-        <img src="''' + url_for('static', filename='oak.jpg') + '''">
+        <img src="''' + url_for('static', filename='lab1/oak.jpg') + '''">
     </body>
 </html>
 '''
@@ -60,11 +60,11 @@ def student():
 <html>
     <head>
         <title>Информация о студенте</title>
-        <link rel="stylesheet" href="''' + url_for('static', filename='lab1.css') + '''">
+        <link rel="stylesheet" href="''' + url_for('static', filename='lab1/lab1.css') + '''">
     </head>
     <body>
         <p>ФИО: Адалинская Тэя Валентиновна</p>
-        <img src="''' + url_for('static', filename='nstu_logo.png') + '''" alt="Логотип НГТУ">
+        <img src="''' + url_for('static', filename='lab1/nstu_logo.png') + '''" alt="Логотип НГТУ">
     </body>
 </html>
 '''
@@ -77,7 +77,7 @@ def python_info():
 <html>
     <head>
         <title>О языке Python</title>
-        <link rel="stylesheet" href="''' + url_for('static', filename='lab1.css') + '''">
+        <link rel="stylesheet" href="''' + url_for('static', filename='lab1/lab1.css') + '''">
     </head>
     <body>
         <p>Python - это интерпретируемый, интерактивный, объектно-ориентированный и высокоуровневый 
@@ -89,7 +89,7 @@ def python_info():
         <p>За выбором названия Python также стоит интересный факт. Гвидо ван Россум был поклонником 
         популярного в то время комедийного шоу BBC «Летающий цирк Монти Пайтона». Поэтому он решил 
         взять название Python для создаваемого языка программирования.</p>
-        <img src="''' + url_for('static', filename='python_code.png') + '''" alt="Python Programming">
+        <img src="''' + url_for('static', filename='lab1/python_code.png') + '''" alt="Python Programming">
     </body>
 </html>
 '''
@@ -112,7 +112,7 @@ def extra():
         <p>Как обучается искусственный интеллект? ИИ обучается на основе данных с использованием алгоритмов. 
         Модель анализирует эти данные, выявляет закономерности и улучшает свои прогнозы через повторные 
         итерации.</p>
-        <img src="''' + url_for('static', filename='ai_image.jpg') + '''" alt="Artificial Intelligence">
+        <img src="''' + url_for('static', filename='lab1/ai_image.jpg') + '''" alt="Artificial Intelligence">
     </body>
 </html>
 '''
