@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ваш Билет</title>
+</head>
+<body>
+    <h1>{{ ticket_type }}</h1>
+    <p><strong>ФИО:</strong> {{ name }}</p>
+    <p><strong>Возраст:</strong> {{ age }}</p>
+    <p><strong>Пункт выезда:</strong> {{ departure }}</p>
+    <p><strong>Пункт назначения:</strong> {{ destination }}</p>
+    <p><strong>Дата поездки:</strong> {{ travel_date }}</p>
+    <p><strong>Полка:</strong> {{ seat_type }}</p>
+    
+    <p><strong>Дополнительно:</strong></p>
+    <ul>
+        {% if bedding %}<li>С бельём</li>{% endif %}
+        {% if baggage %}<li>С багажом</li>{% endif %}
+        {% if insurance %}<li>Страховка</li>{% endif %}
+    </ul>
+
+    <h2>Итоговая стоимость: {{ price }} руб.</h2>
+</body>
+</html>

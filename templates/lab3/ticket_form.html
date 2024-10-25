@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Форма Железнодорожного Билета</title>
+</head>
+<body>
+    <h1>Форма Железнодорожного Билета</h1>
+    
+    {% if errors %}
+        <div style="color: red;">
+            {% for error in errors.values() %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <form method="POST">
+        <label>ФИО пассажира: <input type="text" name="name" required></label><br>
+        
+        <label>Полка:
+            <select name="seat_type" required>
+                <option value="нижняя">Нижняя</option>
+                <option value="верхняя">Верхняя</option>
+                <option value="верхняя боковая">Верхняя боковая</option>
+                <option value="нижняя боковая">Нижняя боковая</option>
+            </select>
+        </label><br>
+        
+        <label><input type="checkbox" name="bedding"> С бельём</label><br>
+        <label><input type="checkbox" name="baggage"> С багажом</label><br>
+        
+        <label>Возраст: <input type="number" name="age" min="1" max="120" required></label><br>
+        <label>Пункт выезда: <input type="text" name="departure" required></label><br>
+        <label>Пункт назначения: <input type="text" name="destination" required></label><br>
+        <label>Дата поездки: <input type="date" name="travel_date" required></label><br>
+        
+        <label><input type="checkbox" name="insurance"> Нужна страховка</label><br>
+        
+        <button type="submit">Забронировать</button>
+    </form>
+</body>
+</html>

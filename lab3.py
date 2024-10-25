@@ -84,7 +84,7 @@ def settings():
     text_style = request.args.get('text_style')
 
 
-    resp = make_response(render_template('lab3/settings.html', 
+    resp = make_response(render_template('/lab3/settings.html', 
                                          color=request.cookies.get('color'), 
                                          background=request.cookies.get('background'), 
                                          font_size=request.cookies.get('font_size'), 
@@ -101,3 +101,67 @@ def settings():
 
     return resp
 
+
+@lab3.route('/lab3/ticket_form', methods=['GET', 'POST'])
+def ticket():
+    if request.method == 'POST':
+        # Получение данных формы
+        name = request.form.get('name')
+        seat_type = request.form.get('seat_type')
+        bedding = request.form.get('bedding') == 'on'
+        baggage = request.form.get('baggage') == 'on'
+        insurance = request.form.get('insurance') == 'on'
+        age = request.form.get('age')
+        departure = request.form.get('departure')
+        destination = request.form.get('destination')
+        travel_date = request.form.get('travel_date')
+
+        # Проверка заполненности полей
+        errors = {}
+        if not name or not seat_type or not age or not departure or not destination or not travel_date:
+            errors['empty'] = "Все поля должны быть заполнены"
+        
+        # Проверка возраста
+        try:
+            age = int(age)
+            if age < 1 or age > 120:
+                errors['age'] = "Возраст должен быть от 1 до 120 лет"
+        except ValueError:
+            errors['age'] = "Возраст должен быть числом"
+
+        # Если ошибок нет, вычисляем стоимость и отображаем билет
+        if not errors:
+            price = 700 if age < 18 else 1000
+            if seat_type in ['нижняя', 'нижняя боковая']:
+                price += 100
+            if bedding:
+                price += 75
+            if baggage:
+                price += 250
+            if insurance:
+                price += 150
+            ticket_type = "Детский билет" if age < 18 else "Взрослый билет"
+
+            return render_template(
+                'lab3/ticket.html',
+                name=name,
+                seat_type=seat_type,
+                bedding=bedding,
+                baggage=baggage,
+                insurance=insurance,
+                age=age,
+                departure=departure,
+                destination=destination,
+                travel_date=travel_date,
+                price=price,
+                ticket_type=ticket_type
+            )
+
+        return render_template('lab3/ticket_form.html', errors=errors)
+
+    return render_template('lab3/ticket_form.html')
+
+
+@lab3.route('/lab3/ticket')
+def ticket_form():
+    return render_template('lab3/ticket.html')
