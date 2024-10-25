@@ -76,30 +76,42 @@ def success():
     return render_template('lab3/success.html', price=price)
 
 
-@lab3.route('/lab3/settings')
-def settings():
-    color = request.args.get('color')
-    background = request.args.get('background')
-    font_size = request.args.get('font_size')
-    text_style = request.args.get('text_style')
-
-
-    resp = make_response(render_template('/lab3/settings.html', 
-                                         color=request.cookies.get('color'), 
-                                         background=request.cookies.get('background'), 
-                                         font_size=request.cookies.get('font_size'), 
-                                         text_style=request.cookies.get('text_style')))
-
-    if color:
-        resp.set_cookie('color', color)
-    if background:
-        resp.set_cookie('background', background)
-    if font_size:
-        resp.set_cookie('font_size', font_size)
-    if text_style:
-        resp.set_cookie('text_style', text_style)
-
+@lab3.route('/lab3/clear_settings')
+def clear_settings():
+    resp = make_response(redirect('/lab3/settings'))
+    resp.delete_cookie('color')
+    resp.delete_cookie('background')
+    resp.delete_cookie('font_size')
+    resp.delete_cookie('text_style')
     return resp
+
+
+@lab3.route('/lab3/settings', methods=['GET', 'POST'])
+def settings():
+    if request.method == 'POST':
+        color = request.form.get('color')
+        background = request.form.get('background')
+        font_size = request.form.get('font_size')
+        text_style = request.form.get('text_style')
+
+        # Устанавливаем куки
+        resp = make_response(redirect('/lab3/settings'))
+        if color:
+            resp.set_cookie('color', color)
+        if background:
+            resp.set_cookie('background', background)
+        if font_size:
+            resp.set_cookie('font_size', font_size)
+        if text_style:
+            resp.set_cookie('text_style', text_style)
+        return resp
+
+    # Отображаем настройки, используя куки
+    return render_template('lab3/settings.html', 
+                           color=request.cookies.get('color', '#000000'), 
+                           background=request.cookies.get('background', '#ffffff'), 
+                           font_size=request.cookies.get('font_size', '16'), 
+                           text_style=request.cookies.get('text_style', ''))
 
 
 @lab3.route('/lab3/ticket_form', methods=['GET', 'POST'])

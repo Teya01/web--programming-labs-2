@@ -4,20 +4,20 @@
 
 {% block main %}
     <h1>Настройки стиля</h1>
-    <form>
+    <form method="POST" action="/lab3/settings">
         <div>
             <label class="label" for="color">Выберите цвет текста:</label>
-            <input type="color" id="color" name="color" value="{{ color or '#000000' }}">
+            <input type="color" id="color" name="color" value="{{ color }}">
         </div>
 
         <div>
             <label class="label" for="background">Выберите цвет фона:</label>
-            <input type="color" id="background" name="background" value="{{ background or '#ffffff' }}">
+            <input type="color" id="background" name="background" value="{{ background }}">
         </div>
 
         <div>
             <label class="label" for="font_size">Выберите размер шрифта (px):</label>
-            <input type="number" id="font_size" name="font_size" value="{{ font_size or 16 }}" min="10" max="40">
+            <input type="number" id="font_size" name="font_size" value="{{ font_size }}" min="10" max="40">
         </div>
 
         <div>
@@ -33,5 +33,8 @@
             <button type="submit">OK</button>
         </div>
     </form>
-{% endblock %}
 
+    <form method="GET" action="/lab3/clear_settings">
+        <button type="submit">Сбросить настройки</button>
+    </form>
+{% endblock %}
