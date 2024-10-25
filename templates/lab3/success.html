@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+    <div style="text-align: center; margin-top: 50px;">
+        <h1>Спасибо!</h1>
+        <p>Ваш заказ оплачен на сумму <strong>{{ price }}</strong> рублей. Ожидайте доставку.</p>
+        <div>
+            <a href="/lab3/order" style="text-decoration: none; color: white; background-color: #b88f5c; padding: 10px 20px; border-radius: 4px;">Вернуться в основное меню</a>
+        </div>
+    </div>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #d69292;
+        }
+
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+    </style>
+{% endblock %}
