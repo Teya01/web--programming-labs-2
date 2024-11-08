@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Деление чисел{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+    {% if error %}
+        {{ error }}
+    {% else %}
+    <h1>Деление чисел</h1>
+    {{ x1 }} / {{ x2 }} = {{ result }}
+    {% endif %}
+    <a href="{{ url_for('lab4.div_form') }}">Назад к форме</a>
+{% endblock %}
