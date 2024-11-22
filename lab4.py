@@ -170,7 +170,7 @@ if __name__ == '__main__':
     lab4.run(debug=True)
 
 
-@lab4.route('/refrigerator', methods=['GET', 'POST'])
+@lab4.route('/lab4/refrigerator', methods=['GET', 'POST'])
 def refrigerator():
     message = None
     snowflakes = ""
@@ -199,9 +199,10 @@ def refrigerator():
             except ValueError:
                 message = "Ошибка: температура должна быть числом"
 
-    return render_template('refrigerator.html', message=message, snowflakes=snowflakes)
+    return render_template('lab4/refrigerator.html', message=message, snowflakes=snowflakes)
 
 if __name__ == "__main__":
     lab4.run(debug=True)
+
 
 
