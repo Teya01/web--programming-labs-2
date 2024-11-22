@@ -205,4 +205,60 @@ if __name__ == "__main__":
     lab4.run(debug=True)
 
 
+grain_prices = {
+    "ячмень": 12345,
+    "овёс": 8522,
+    "пшеница": 8722,
+    "рожь": 14111
+}
+
+@lab4.route('/lab4/grain_order', methods=['GET', 'POST'])
+def grain_order():
+    if request.method == 'POST':
+        grain_type = request.form.get('grain_type')
+        weight = request.form.get('weight')
+
+        # Проверка на ошибки
+        if not weight:
+            error = "Ошибка: не указан вес зерна."
+            return render_template('lab4/grain_order.html', error=error)
+
+        try:
+            weight = float(weight)
+        except ValueError:
+            error = "Ошибка: вес должен быть числом."
+            return render_template('lab4/grain_order.html', error=error)
+
+        if weight <= 0:
+            error = "Ошибка: вес должен быть больше 0."
+            return render_template('lab4/grain_order.html', error=error)
+
+        if weight > 500:
+            error = "Ошибка: такого объёма зерна сейчас нет в наличии."
+            return render_template('lab4/grain_order.html', error=error)
+
+        # Рассчитать сумму заказа
+        price_per_ton = grain_prices.get(grain_type)
+        if not price_per_ton:
+            error = "Ошибка: неверный тип зерна."
+            return render_template('lab4/grain_order.html', error=error)
+
+        total_cost = price_per_ton * weight
+        discount = 0
+
+        if weight > 50:
+            discount = 0.1 
+            total_cost *= (1 - discount)
+
+        return render_template('lab4/grain_order.html', 
+                               success=True, 
+                               grain_type=grain_type, 
+                               weight=weight, 
+                               total_cost=total_cost, 
+                               discount=discount * 100)
+
+    return render_template('lab4/grain_order.html')
+
+if __name__ == '__main__':
+    lab4.run(debug=True)
 
