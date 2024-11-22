@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, session
 lab4 = Blueprint('lab4', __name__)
-
+lab4 = Flask(__name__)
+lab4.secret_key = 'supersecretkey'
 
 @lab4.route('/lab4/')
 def lab():
@@ -120,51 +121,97 @@ def tree():
     return redirect('/lab4/tree')
 
 
-users = [
+users1 = [
     {'login': 'alex', 'password': '123', 'name': 'Alex Johnson', 'gender': 'Male'},
     {'login': 'bob', 'password': '555', 'name': 'Bob Marley', 'gender': 'Male'},
     {'login': 'teya', 'password': '456', 'name': 'Teya Adalinskaya', 'gender': 'Female'},
     {'login': 'natalie', 'password': '789', 'name': 'Natalie White', 'gender': 'Female'}
 ]
 
+def is_authorized():
+    return 'login' in session
+
+@lab4.route('/lab4/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        new_login = request.form.get('login')
+        new_password = request.form.get('password')
+        new_name = request.form.get('name')
+        new_gender = request.form.get('gender')
+
+        if not all([new_login, new_password, new_name, new_gender]):
+            error = "Все поля должны быть заполнены!"
+            return render_template('lab4/register.html', error=error)
+
+        if any(user['login'] == new_login for user in users1):
+            error = "Пользователь с таким логином уже существует!"
+            return render_template('lab4/register.html', error=error)
+
+        global users1  # Указываем, что будем изменять глобальную переменную
+        users1.append({
+            'login': new_login,
+            'password': new_password,
+            'name': new_name,
+            'gender': new_gender
+        })
+        return redirect('/lab4/login')
+
+    return render_template('lab4/register.html', error=None)
+
+@lab4.route('/lab4/users', methods=['GET', 'POST'])
+def user_list():
+    if not is_authorized():
+        return redirect('/lab4/login')
+
+    login = session['login']
+    current_user = next(user for user in users1 if user['login'] == login)
+
+    if request.method == 'POST':
+        action = request.form.get('action')
+        if action == 'delete':
+            global users1  # Указываем, что будем изменять глобальную переменную
+            users1 = [user for user in users1 if user['login'] != login]
+            session.pop('login', None)
+            return redirect('/lab4/login')
+        elif action == 'update':
+            new_name = request.form.get('name')
+            new_password = request.form.get('password')
+            for user in users1:
+                if user['login'] == login:
+                    user['name'] = new_name
+                    user['password'] = new_password
+            return redirect('/lab4/users')
+
+    return render_template('lab4/users.html', users=users1, current_user=current_user)
 
 @lab4.route('/lab4/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'GET':
-        if 'login' in session:
-            authorized = True
-            login = session['login']
-            # Find the logged-in user
-            user = next((user for user in users if user['login'] == login), None)
-        else:
-            authorized = False
-            login = ''
-            user = None
-        return render_template('lab4/login.html', authorized=authorized, login=login, user=user, error=None)
-    
-    login = request.form.get('login')
-    password = request.form.get('password')
+    if request.method == 'POST':
+        login = request.form.get('login')
+        password = request.form.get('password')
 
-    if not login:
-        error = 'Не введён логин'
-        return render_template('lab4/login.html', error=error, authorized=False, login=login, user=None)
-    if not password:
-        error = 'Не введён пароль'
-        return render_template('lab4/login.html', error=error, authorized=False, login=login, user=None)
-    
-    for user in users:
-        if login == user['login'] and password == user['password']:
+        if not login or not password:
+            error = 'Не введён логин или пароль'
+            return render_template('lab4/login.html', error=error)
+
+        user = next((user for user in users1 if user['login'] == login and user['password'] == password), None)
+        if user:
             session['login'] = login
-            return redirect('/lab4')
-    
-    error = 'Неверные логин и/или пароль'
-    return render_template('lab4/login.html', error=error, authorized=False, login=login, user=None)
+            return redirect('/lab4/users')
+        else:
+            error = 'Неверные логин и/или пароль'
+            return render_template('lab4/login.html', error=error)
 
+    return render_template('lab4/login.html', error=None)
 
 @lab4.route('/lab4/logout', methods=['POST'])
 def logout():
     session.pop('login', None)
     return redirect('/lab4/login')
+
+@lab4.route('/lab4')
+def lab4_home():
+    return render_template('lab4/home.html')
 
 if __name__ == '__main__':
     lab4.run(debug=True)
