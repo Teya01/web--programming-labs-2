@@ -127,7 +127,7 @@ users = [
     {'login': 'natalie', 'password': '789'},
 ]
 
-@lab4.route('/lab4/login', methods = ['GET', 'POST'])
+@lab4.route('/lab4/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         if 'login' in session:
@@ -136,17 +136,20 @@ def login():
         else:
             authorized = False
             login = ''
-        return render_template('lab4/login.html', authorized=authorized, login=login)
+        return render_template('lab4/login.html', authorized=authorized, login=login, error=None)
     
     login = request.form.get('login')
     password = request.form.get('password')
 
     for user in users:
-        if login == user['login'] and password == user['password']:
+        if login == user['login'] and password == user['password']:  # In real scenarios, use hashed password comparison
             session['login'] = login
-            return redirect('/lab4/login')
+            return redirect('/lab4')
     
     error = 'Неверные логин и/или пароль'
     return render_template('lab4/login.html', error=error, authorized=False)
 
-
+@lab4.route('/lab4/logout', methods=['POST'])
+def logout():
+    session.pop('login', None)
+    return redirect('/lab4/login')
