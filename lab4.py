@@ -1,7 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, session
 lab4 = Blueprint('lab4', __name__)
-lab4 = Flask(__name__)
-lab4.secret_key = 'supersecretkey'
 
 @lab4.route('/lab4/')
 def lab():
@@ -120,8 +118,8 @@ def tree():
     
     return redirect('/lab4/tree')
 
-
-users1 = [
+# Инициализация списка пользователей
+users = [
     {'login': 'alex', 'password': '123', 'name': 'Alex Johnson', 'gender': 'Male'},
     {'login': 'bob', 'password': '555', 'name': 'Bob Marley', 'gender': 'Male'},
     {'login': 'teya', 'password': '456', 'name': 'Teya Adalinskaya', 'gender': 'Female'},
@@ -143,12 +141,12 @@ def register():
             error = "Все поля должны быть заполнены!"
             return render_template('lab4/register.html', error=error)
 
-        if any(user['login'] == new_login for user in users1):
+        if any(user['login'] == new_login for user in users):
             error = "Пользователь с таким логином уже существует!"
             return render_template('lab4/register.html', error=error)
 
-        global users1  # Указываем, что будем изменять глобальную переменную
-        users1.append({
+        # Добавляем нового пользователя
+        users.lab4end({
             'login': new_login,
             'password': new_password,
             'name': new_name,
@@ -164,25 +162,25 @@ def user_list():
         return redirect('/lab4/login')
 
     login = session['login']
-    current_user = next(user for user in users1 if user['login'] == login)
+    current_user = next(user for user in users if user['login'] == login)
 
     if request.method == 'POST':
         action = request.form.get('action')
         if action == 'delete':
-            global users1  # Указываем, что будем изменять глобальную переменную
-            users1 = [user for user in users1 if user['login'] != login]
+            # Удаляем текущего пользователя
+            users[:] = [user for user in users if user['login'] != login]
             session.pop('login', None)
             return redirect('/lab4/login')
         elif action == 'update':
             new_name = request.form.get('name')
             new_password = request.form.get('password')
-            for user in users1:
+            for user in users:
                 if user['login'] == login:
                     user['name'] = new_name
                     user['password'] = new_password
             return redirect('/lab4/users')
 
-    return render_template('lab4/users.html', users=users1, current_user=current_user)
+    return render_template('lab4/users.html', users=users, current_user=current_user)
 
 @lab4.route('/lab4/login', methods=['GET', 'POST'])
 def login():
@@ -194,7 +192,7 @@ def login():
             error = 'Не введён логин или пароль'
             return render_template('lab4/login.html', error=error)
 
-        user = next((user for user in users1 if user['login'] == login and user['password'] == password), None)
+        user = next((user for user in users if user['login'] == login and user['password'] == password), None)
         if user:
             session['login'] = login
             return redirect('/lab4/users')
@@ -216,7 +214,6 @@ def lab4_home():
 if __name__ == '__main__':
     lab4.run(debug=True)
 
-
 @lab4.route('/lab4/refrigerator', methods=['GET', 'POST'])
 def refrigerator():
     message = None
@@ -236,13 +233,13 @@ def refrigerator():
                     message = "Не удалось установить температуру — слишком высокое значение"
                 elif -12 <= temp <= -9:
                     message = f"Установлена температура: {temp}°C"
-                    snowflakes = "\u2744\u2744\u2744"  # Three blue snowflakes
+                    snowflakes = "\u2744\u2744\u2744" 
                 elif -8 <= temp <= -5:
                     message = f"Установлена температура: {temp}°C"
-                    snowflakes = "\u2744\u2744"  # Two blue snowflakes
+                    snowflakes = "\u2744\u2744"  
                 elif -4 <= temp <= -1:
                     message = f"Установлена температура: {temp}°C"
-                    snowflakes = "\u2744"  # One blue snowflake
+                    snowflakes = "\u2744" 
             except ValueError:
                 message = "Ошибка: температура должна быть числом"
 
