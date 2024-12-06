@@ -1,13 +1,21 @@
 {% extends "base.html" %}
 
-{% block lab %}Лабораторная работа 5{% endblock %}
+{% block lab %}Мои статьи{% endblock %}
+
+{% block lab_name %}Лабораторная работа 5{% endblock %}
 
 {% block main %}
-    <h1>Статьи</h1>
-
+<h1>Статьи</h1>
+{% if message %}
+    <p>{{ message }}</p>
+{% else %}
     {% for article in articles %}
-        <h2>{{ article['title'] }}</h2>
-        <blockquote>{{ article['article_text'] }}</blockquote>
+        <h2>{{ article.title }}</h2>
+        <blockquote>{{ article.article_text }}</blockquote>
+        <a href="/lab5/edit/{{ article.id }}">Редактировать</a>
+        <form method="POST" action="/lab5/delete/{{ article.id }}" style="display:inline;">
+            <button type="submit" style="color: red;">Удалить</button>
+        </form>
     {% endfor %}
-
+{% endif %}
 {% endblock %}
