@@ -6,15 +6,23 @@
 
 {% block main %}
 <h1>Создать статью</h1>
+
 {% if error %}
     <p style="color: red;">{{ error }}</p>
 {% endif %}
+
 <form method="POST" action="">
-    <label for="title">Название статьи:</label><br>
+    <label for="title">Заголовок:</label><br>
     <input type="text" id="title" name="title" required><br><br>
 
     <label for="article_text">Текст статьи:</label><br>
     <textarea id="article_text" name="article_text" rows="10" cols="50" required></textarea><br><br>
+
+    <label for="is_favorite">Любимая:</label>
+    <input type="checkbox" id="is_favorite" name="is_favorite"><br><br>
+
+    <label for="is_public">Публичная:</label>
+    <input type="checkbox" id="is_public" name="is_public"><br><br>
 
     <button type="submit">Создать</button>
     <a href="/lab5/list">Отмена</a>

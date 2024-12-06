@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block lab %}Публичные статьи{% endblock %}
+
+{% block lab_name %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+<h1>Публичные статьи</h1>
+{% if message %}
+    <p>{{ message }}</p>
+{% else %}
+    {% for article in articles %}
+        <h2>{{ article.title }}</h2>
+        <blockquote>{{ article.article_text }}</blockquote>
+        <p><strong>{% if article.is_favorite %}Любимая{% else %}Не любимая{% endif %}</strong></p>
+    {% endfor %}
+{% endif %}
+{% endblock %}
