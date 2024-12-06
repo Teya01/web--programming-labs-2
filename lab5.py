@@ -133,7 +133,7 @@ def list():
 
 @lab5.route('/lab5/create', methods = ['GET', 'POST'])
 def create():
-    user_id=session.get('login')
+    login=session.get('login')
     if not login:
         return redirect('/lab5/login')
     
