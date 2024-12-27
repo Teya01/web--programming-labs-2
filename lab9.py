@@ -51,9 +51,13 @@ def result():
     elif preference == 'something_tasty' and detail == 'savory':
         image = 'cake.jpg'
         message = f"Поздравляю тебя, {name}! Желаю счастья и успеха! Вот тебе кусочек пирога."
-    else:
-        image = 'beautiful.jpg'
+    elif preference == 'something_beautiful' and detail == 'nature':
+        image = 'nature.jpg'
         message = f"Поздравляю тебя, {name}! Пусть жизнь будет яркой и красивой, как эта открытка!"
+    else:
+        image = 'art.jpg'
+        message = f"Поздравляю тебя, {name}! Пусть жизнь будет яркой и красивой, как эта открытка!"
+    
 
     return render_template('lab9/result.html', message=message, image=image)
 
