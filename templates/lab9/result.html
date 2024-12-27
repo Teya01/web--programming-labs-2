@@ -1,5 +1,11 @@
 {% extends "base.html" %}
+
 {% block main %}
+    <h1>Ваше поздравление</h1>
     <p>{{ message }}</p>
     <img src="/static/images/{{ image }}" alt="Поздравление">
+    
+    <form action="{{ url_for('lab9.reset') }}" method="get">
+        <button type="submit">Начать заново</button>
+    </form>
 {% endblock %}

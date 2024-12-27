@@ -4,6 +4,10 @@ lab9 = Blueprint('lab9', __name__)
 
 @lab9.route('/lab9/', methods=['GET', 'POST'])
 def main():
+    # Если данные уже введены, перенаправляем на страницу с результатом
+    if session.get('name') and session.get('completed'):
+        return redirect(url_for('.result'))
+    
     if request.method == 'POST':
         session['name'] = request.form['name']
         return redirect(url_for('.age'))
@@ -34,17 +38,23 @@ def question1():
 def question2():
     if request.method == 'POST':
         session['detail'] = request.form['detail']
+        session['completed'] = True  # Отмечаем завершение заполнения данных
         return redirect(url_for('.result'))
     return render_template('lab9/question2.html', preference=session.get('preference'))
 
 @lab9.route('/lab9/result/')
 def result():
+    # Проверяем наличие необходимых данных
+    if not session.get('completed'):
+        return redirect(url_for('.main'))
+    
     name = session.get('name')
     age = session.get('age')
     gender = session.get('gender')
     preference = session.get('preference')
     detail = session.get('detail')
 
+    # Определяем поздравление и изображение
     if preference == 'something_tasty' and detail == 'sweet':
         image = 'candy.jpg'
         message = f"Поздравляю тебя, {name}! Желаю, чтобы ты быстро вырос{'ла' if gender == 'female' else ''}, был{'а' if gender == 'female' else ''} умным{'ой' if gender == 'female' else ''}. Вот тебе подарок — мешочек конфет."
@@ -58,6 +68,11 @@ def result():
         image = 'art.jpg'
         message = f"Поздравляю тебя, {name}! Пусть жизнь будет яркой и красивой, как эта открытка!"
     
-
     return render_template('lab9/result.html', message=message, image=image)
+
+@lab9.route('/lab9/reset/')
+def reset():
+    # Сбрасываем сессию и возвращаем пользователя на главную страницу
+    session.clear()
+    return redirect(url_for('.main'))
 
