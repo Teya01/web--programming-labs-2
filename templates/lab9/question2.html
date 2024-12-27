@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block main %}
+    <form method="post">
+        {% if preference == 'something_tasty' %}
+            <p>Выберите:</p>
+            <button name="detail" value="sweet">Сладкое</button>
+            <button name="detail" value="savory">Сытное</button>
+        {% else %}
+            <p>Выберите что-то красивое:</p>
+            <button name="detail" value="art">Искусство</button>
+            <button name="detail" value="nature">Природа</button>
+        {% endif %}
+    </form>
+{% endblock %}
