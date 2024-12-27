@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{# Номер лабораторной работы: #}
+{# номер лабораторной работы: #}
 {% block lab %}Лабораторная работа 6{% endblock %}
 
 {% block script %}
@@ -31,21 +31,19 @@ function getOfficeList() {
                 const li = document.createElement('li');
                 li.innerText = `Кабинет №${office.number}, стоимость: ${office.price} руб., статус: ${office.tenant || 'свободен'}`;
 
-                if (!office.tenant) {
-                    const bookingButton = document.createElement('button');
-                    bookingButton.innerText = 'Зарезервировать';
-                    bookingButton.onclick = function () { booking(office.number); };
-                    li.appendChild(bookingButton);
-                } else {
-                    if (office.tenant === '{{ session.login }}') {
-                        totalCost += office.price;
+                const bookingButton = document.createElement('button');
+                bookingButton.innerText = 'зарезервировать';
+                bookingButton.onclick = function () { booking(office.number); };
+                li.appendChild(bookingButton);
 
-                        const releaseButton = document.createElement('button');
-                        releaseButton.innerText = 'Освободить';
-                        releaseButton.onclick = function () { release(office.number); };
-                        li.appendChild(releaseButton);
-                    } else {
-                        li.innerText += ` (арендатор: ${office.tenant})`;
+                if (office.tenant) {
+                    const releaseButton = document.createElement('button');
+                    releaseButton.innerText = 'освободить';
+                    releaseButton.onclick = function () { release(office.number); };
+                    li.appendChild(releaseButton);
+
+                    if (office.tenant === 'Ваш_логин') { // Замените 'Ваш_логин' на проверку текущего пользователя
+                        totalCost += office.price;
                     }
                 }
 
@@ -140,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 {% endblock %}
 
-{# Основной контент: #}
+{# основной контент: #}
 {% block main %}
     <h1>Список кабинетов</h1>
     <ul id="office-list"></ul>
