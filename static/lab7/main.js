@@ -1,56 +1,43 @@
 function fillFilmList() {
     fetch('/lab7/rest-api/films/')
-    .then(function (data) {
-        return data.json();
-    })
-    .then(function (films) {
-        let tbody = document.getElementById('film-list');
-        tbody.innerHTML = '';
-        for(let i = 0; i<films.length; i++) {
-            let tr = document.createElement('tr');
+        .then(data => data.json())
+        .then(films => {
+            const tbody = document.getElementById('film-list');
+            tbody.innerHTML = '';
 
-            let tdTitle = document.createElement('td');
-            let tdTitleRus = document.createElement('td');
-            let tdYear = document.createElement('td');
-            let tdActions = document.createElement('td');
+            films.forEach((film, index) => {
+                const tr = document.createElement('tr');
 
-            tdTitle.innerText = films[i].title == films[i].title_ru ? '': films[i].title;
-            tdTitleRus.innerText = films[i].title_ru;
-            tdYear.innerText = films[i].year;
+                const tdTitleRus = document.createElement('td');
+                tdTitleRus.innerText = film.title_ru;
 
-            let editButton = document.createElement('button');
-            editButton.innerText = 'редактировать';
-            editButton.onclick = function() {
-                editFilm(i);
-            };
+                const tdTitle = document.createElement('td');
+                tdTitle.innerHTML = film.title ? `<i>(${film.title})</i>` : '';
 
-            let delButton = document.createElement('button');
-            delButton.innerText = 'удалить';
-            delButton.onclick = function() {
-                deleteFilm(i, films[i].title_ru);
-            };
+                const tdYear = document.createElement('td');
+                tdYear.innerText = film.year;
 
-            tdActions.append(editButton);
-            tdActions.append(delButton);
+                const tdActions = document.createElement('td');
+                const editButton = document.createElement('button');
+                editButton.innerText = 'редактировать';
+                editButton.onclick = () => editFilm(index);
 
-            tr.append(tdTitle);
-            tr.append(tdTitleRus);
-            tr.append(tdYear);
-            tr.append(tdActions);
+                const delButton = document.createElement('button');
+                delButton.innerText = 'удалить';
+                delButton.onclick = () => deleteFilm(index, film.title_ru);
 
-            tbody.append(tr);
-        }
-    })
+                tdActions.append(editButton, delButton);
+                tr.append(tdTitleRus, tdTitle, tdYear, tdActions);
+                tbody.append(tr);
+            });
+        });
 }
 
 function deleteFilm(id, title) {
-    if(! confirm(`Вы точно хотите удалить фильм "${title}"?`))
-        return;
+    if (!confirm(`Вы точно хотите удалить фильм "${title}"?`)) return;
 
-    fetch(`/lab7/rest-api/films/${id}`, {method: 'DELETE'})
-        .then(function () {
-            fillFilmList();
-        });
+    fetch(`/lab7/rest-api/films/${id}`, { method: 'DELETE' })
+        .then(() => fillFilmList());
 }
 
 function showModal() {
@@ -77,45 +64,45 @@ function addFilm() {
 function sendFilm() {
     const id = document.getElementById('id').value;
     const film = {
-        title: document.getElementById('title').value,
-        title_ru: document.getElementById('title-ru').value,
-        year: document.getElementById('year').value,
-        description: document.getElementById('description').value
-    }
+        title: document.getElementById('title').value.trim(),
+        title_ru: document.getElementById('title-ru').value.trim(),
+        year: document.getElementById('year').value.trim(),
+        description: document.getElementById('description').value.trim(),
+    };
 
     const url = `/lab7/rest-api/films/${id}`;
     const method = id === '' ? 'POST' : 'PUT';
 
     fetch(url, {
         method: method,
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(film)
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(film),
     })
-    .then(function(resp) {
-        if(resp.ok) {
-            fillFilmList();
-            hideModal();
-            return {};
-        }
-        return resp.json();
-    })
-    .then(function(errors) {
-        if (errors.description)
-            document.getElementById('description-error').innerText = errors.description;
-    });
+        .then(resp => {
+            if (resp.ok) {
+                fillFilmList();
+                hideModal();
+                return {};
+            }
+            return resp.json();
+        })
+        .then(errors => {
+            if (errors.description) {
+                document.getElementById('description-error').innerText = errors.description;
+            }
+        });
 }
 
 function editFilm(id) {
-    fetch (`/lab7/rest-api/films/${id}`)
-    .then(function (data) {
-        return data.json();
-    })
-    .then(function (film) {
-        document.getElementById('id').value = id;
-        document.getElementById('title').value = film.title;
-        document.getElementById('title-ru').value = film.title_ru;
-        document.getElementById('year').value = film.year;
-        document.getElementById('description').value = film.description;
-        showModal();
-    });
+    fetch(`/lab7/rest-api/films/${id}`)
+        .then(data => data.json())
+        .then(film => {
+            document.getElementById('id').value = id;
+            document.getElementById('title').value = film.title;
+            document.getElementById('title-ru').value = film.title_ru;
+            document.getElementById('year').value = film.year;
+            document.getElementById('description').value = film.description;
+            showModal();
+        });
 }
+

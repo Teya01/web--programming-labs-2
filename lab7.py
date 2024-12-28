@@ -1,11 +1,8 @@
-from flask import Blueprint, render_template, request, jsonify, abort
+from flask import Flask, Blueprint, render_template, request, jsonify, abort
+
+app = Flask(__name__)
 
 lab7 = Blueprint('lab7', __name__)
-
-@lab7.route('/lab7/')
-def main():
-    return render_template('lab7/index.html')
-
 
 films = [
     {
@@ -28,50 +25,58 @@ films = [
     },
 ]
 
+@lab7.route('/lab7/')
+def main():
+    return render_template('lab7/index.html')
 
 @lab7.route('/lab7/rest-api/films/', methods=['GET'])
 def get_films():
     return jsonify(films)
 
-
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['GET'])
 def get_film_by_id(id):
-    if 0 <= id < len(films):  # Проверка на корректность id
+    if 0 <= id < len(films):
         return jsonify(films[id])
-    else:
-        abort(404)  # Возврат ошибки 404, если id невалиден
-
+    abort(404)
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['DELETE'])
 def del_film(id):
-    if 0 <= id < len(films):  # Проверка на корректность id
-        del films[id]  # Удаление фильма
-        return jsonify(''), 204  # Успешный ответ без содержимого
-    else:
-        abort(404)  # Возврат ошибки 404, если id невалиден
-
+    if 0 <= id < len(films):
+        del films[id]
+        return jsonify(''), 204
+    abort(404)
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['PUT'])
 def put_film(id):
+    if not (0 <= id < len(films)):
+        abort(404)
+
     film = request.get_json()
-    if film['description'] == '':
-        return jsonify({'description': 'Заполните описание'}), 400
+
+    if not film or not all(key in film for key in ("title", "title_ru", "year", "description")):
+        abort(400)
+
+    if not film['title'].strip():
+        film['title'] = film['title_ru']
+
     films[id] = film
     return jsonify(films[id])
 
-
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_film():
-    film = request.get_json()  # Получение данных нового фильма из тела запроса
-    
-    # Проверка на наличие всех ключей и заполнение описания
-    if not film or not all(key in film for key in ("title", "title_ru", "year", "description")):
-        abort(400)  # Возврат ошибки 400, если данные некорректны
-    if film['description'].strip() == '':
-        return jsonify({"description": "Описание не может быть пустым"}), 400  # Возврат ошибки
-    
-    films.append(film)  # Добавление нового фильма в список
-    new_index = len(films) - 1  # Индекс нового элемента
-    return jsonify({"id": new_index}), 201  # Возврат нового индекса с кодом 201
+    film = request.get_json()
 
+    if not film or not all(key in film for key in ("title", "title_ru", "year", "description")):
+        abort(400)
+
+    if not film['title'].strip():
+        film['title'] = film['title_ru']
+
+    films.append(film)
+    return jsonify({"id": len(films) - 1}), 201
+
+app.register_blueprint(lab7)
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
