@@ -55,9 +55,9 @@ def del_film(id):
 def put_film(id):
     film = request.get_json()
     if film['description'] == '':
-        return {'description': 'Заполните описание'}, 400
+        return jsonify({'description': 'Заполните описание'}), 400
     films[id] = film
-    return films[id]
+    return jsonify(films[id])
 
 
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
