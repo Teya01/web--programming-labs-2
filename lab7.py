@@ -28,9 +28,11 @@ films = [
     },
 ]
 
+
 @lab7.route('/lab7/rest-api/films/', methods=['GET'])
 def get_films():
     return jsonify(films)
+
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['GET'])
 def get_film_by_id(id):
@@ -38,4 +40,14 @@ def get_film_by_id(id):
         return jsonify(films[id])
     else:
         abort(404)  # Возврат ошибки 404, если id невалиден
+
+
+@lab7.route('/lab7/rest-api/films/<int:id>', methods=['DELETE'])
+def del_film(id):
+    if 0 <= id < len(films):  # Проверка на корректность id
+        del films[id]  # Удаление фильма
+        return '', 204  # Успешный ответ без содержимого
+    else:
+        abort(404)  # Возврат ошибки 404, если id невалиден
+
 
