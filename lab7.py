@@ -1,4 +1,5 @@
 from flask import Flask, Blueprint, render_template, request, jsonify, abort
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -25,19 +26,49 @@ films = [
     },
 ]
 
+CURRENT_YEAR = datetime.now().year
+
+
+def validate_film(film):
+    errors = {}
+
+    # Проверка названий
+    if not film.get('title') and not film.get('title_ru'):
+        errors['title'] = 'Должно быть указано хотя бы одно название (оригинальное или русское).'
+    if not film.get('title_ru'):
+        errors['title_ru'] = 'Русское название не может быть пустым.'
+
+    # Проверка года
+    year = film.get('year')
+    if not isinstance(year, int) or not (1895 <= year <= CURRENT_YEAR):
+        errors['year'] = f'Год должен быть в диапазоне от 1895 до {CURRENT_YEAR}.'
+
+    # Проверка описания
+    description = film.get('description', '').strip()
+    if not description:
+        errors['description'] = 'Описание не может быть пустым.'
+    elif len(description) > 2000:
+        errors['description'] = 'Описание не должно превышать 2000 символов.'
+
+    return errors
+
+
 @lab7.route('/lab7/')
 def main():
     return render_template('lab7/index.html')
 
+
 @lab7.route('/lab7/rest-api/films/', methods=['GET'])
 def get_films():
     return jsonify(films)
+
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['GET'])
 def get_film_by_id(id):
     if 0 <= id < len(films):
         return jsonify(films[id])
     abort(404)
+
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['DELETE'])
 def del_film(id):
@@ -46,34 +77,39 @@ def del_film(id):
         return jsonify(''), 204
     abort(404)
 
+
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['PUT'])
 def put_film(id):
     if not (0 <= id < len(films)):
         abort(404)
 
     film = request.get_json()
+    errors = validate_film(film)
+    if errors:
+        return jsonify(errors), 400
 
-    if not film or not all(key in film for key in ("title", "title_ru", "year", "description")):
-        abort(400)
-
-    if not film['title'].strip():
+    if not film['title']:
         film['title'] = film['title_ru']
 
     films[id] = film
     return jsonify(films[id])
 
+
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_film():
     film = request.get_json()
+    print(f"Полученные данные: {film}")
+    errors = validate_film(film)
+    if errors:
+        print(f"Ошибки валидации: {errors}")
+        return jsonify(errors), 400
 
-    if not film or not all(key in film for key in ("title", "title_ru", "year", "description")):
-        abort(400)
-
-    if not film['title'].strip():
+    if not film['title']:
         film['title'] = film['title_ru']
 
     films.append(film)
     return jsonify({"id": len(films) - 1}), 201
+
 
 app.register_blueprint(lab7)
 

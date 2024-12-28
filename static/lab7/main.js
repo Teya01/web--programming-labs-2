@@ -66,12 +66,17 @@ function sendFilm() {
     const film = {
         title: document.getElementById('title').value.trim(),
         title_ru: document.getElementById('title-ru').value.trim(),
-        year: document.getElementById('year').value.trim(),
+        year: parseInt(document.getElementById('year').value.trim()),
         description: document.getElementById('description').value.trim(),
     };
 
-    const url = `/lab7/rest-api/films/${id}`;
-    const method = id === '' ? 'POST' : 'PUT';
+    if (!film.title_ru || !film.description || !film.year) {
+        alert("Пожалуйста, заполните все обязательные поля.");
+        return;
+    }
+
+    const url = id ? `/lab7/rest-api/films/${id}` : '/lab7/rest-api/films/';
+    const method = id ? 'PUT' : 'POST';
 
     fetch(url, {
         method: method,
@@ -87,9 +92,7 @@ function sendFilm() {
             return resp.json();
         })
         .then(errors => {
-            if (errors.description) {
-                document.getElementById('description-error').innerText = errors.description;
-            }
+            document.getElementById('description-error').innerText = errors.description || '';
         });
 }
 
