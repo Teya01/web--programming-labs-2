@@ -53,20 +53,23 @@ def del_film(id):
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['PUT'])
 def put_film(id):
-    if 0 <= id < len(films):  # Проверка на корректность id
-        film = request.get_json()  # Получение данных из тела запроса
-        films[id] = film  # Обновление фильма
-        return jsonify(films[id])  # Возврат обновленного фильма
-    else:
-        abort(404)  # Возврат ошибки 404, если id невалиден
+    film = request.get_json()
+    if film['description'] == '':
+        return {'description': 'Заполните описание'}, 400
+    films[id] = film
+    return films[id]
 
 
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_film():
     film = request.get_json()  # Получение данных нового фильма из тела запроса
+    
+    # Проверка на наличие всех ключей и заполнение описания
     if not film or not all(key in film for key in ("title", "title_ru", "year", "description")):
         abort(400)  # Возврат ошибки 400, если данные некорректны
-
+    if film['description'].strip() == '':
+        return jsonify({"description": "Описание не может быть пустым"}), 400  # Возврат ошибки
+    
     films.append(film)  # Добавление нового фильма в список
     new_index = len(films) - 1  # Индекс нового элемента
     return jsonify({"id": new_index}), 201  # Возврат нового индекса с кодом 201
