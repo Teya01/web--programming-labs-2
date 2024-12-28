@@ -51,3 +51,13 @@ def del_film(id):
         abort(404)  # Возврат ошибки 404, если id невалиден
 
 
+@lab7.route('/lab7/rest-api/films/<int:id>', methods=['PUT'])
+def put_film(id):
+    if 0 <= id < len(films):  # Проверка на корректность id
+        film = request.get_json()  # Получение данных из тела запроса
+        films[id] = film  # Обновление фильма
+        return jsonify(films[id])  # Возврат обновленного фильма
+    else:
+        abort(404)  # Возврат ошибки 404, если id невалиден
+
+
