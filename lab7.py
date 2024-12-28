@@ -46,7 +46,7 @@ def get_film_by_id(id):
 def del_film(id):
     if 0 <= id < len(films):  # Проверка на корректность id
         del films[id]  # Удаление фильма
-        return '', 204  # Успешный ответ без содержимого
+        return jsonify(''), 204  # Успешный ответ без содержимого
     else:
         abort(404)  # Возврат ошибки 404, если id невалиден
 
