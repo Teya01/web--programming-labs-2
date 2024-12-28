@@ -61,3 +61,14 @@ def put_film(id):
         abort(404)  # Возврат ошибки 404, если id невалиден
 
 
+@lab7.route('/lab7/rest-api/films/', methods=['POST'])
+def add_film():
+    film = request.get_json()  # Получение данных нового фильма из тела запроса
+    if not film or not all(key in film for key in ("title", "title_ru", "year", "description")):
+        abort(400)  # Возврат ошибки 400, если данные некорректны
+
+    films.append(film)  # Добавление нового фильма в список
+    new_index = len(films) - 1  # Индекс нового элемента
+    return jsonify({"id": new_index}), 201  # Возврат нового индекса с кодом 201
+
+
