@@ -58,7 +58,7 @@ function showModal() {
 }
 
 function hideModal() {
-    document.querySelector('div.maodal').style.display = 'none';
+    document.querySelector('div.modal').style.display = 'none';
 }
 
 function cancel() {
