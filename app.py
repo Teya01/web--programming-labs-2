@@ -12,6 +12,7 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from db import db
 from os import path
+from flask_login import LoginManager
 
 app = Flask(__name__)
 
@@ -33,6 +34,20 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 
 db.init_app(app)
+
+# Инициализация LoginManager
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+# Укажите маршрут для перенаправления неавторизованных пользователей
+login_manager.login_view = 'lab8.main'
+
+# Обработчик для загрузки пользователя
+from db.models import users
+
+@login_manager.user_loader
+def load_user(user_id):
+    return users.query.get(int(user_id))
 
 app.register_blueprint(lab1) 
 app.register_blueprint(lab2)
