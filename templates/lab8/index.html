@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 8</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.jpeg') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lab5/lab5.css') }}">
+</head>
+<body>
+    <h1>Добро пожаловать!</h1>
+    <p>Имя пользователя: {{ login }}</p>
+    <ul>
+        <li><a href="/lab8/login">Вход</a></li>
+        <li><a href="/lab8/register">Регистрация</a></li>
+        <li><a href="/lab8/article">Список статей</a></li>
+        <li><a href="/lab8/article/create">Создать статью</a></li>
+    </ul>
+</body>
+</html>

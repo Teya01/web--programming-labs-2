@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Адалинская Тэя. {% block lab %}{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.jpeg') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lab5/lab5.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/lab8/login">Вход</a></li>
+                <li><a href="/lab8/register">Регистрация</a></li>
+                <li><a href="/lab8/articles">Список статей</a></li>
+                <li><a href="/lab8/create">Создать статью</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <p>Имя пользователя: anonymous</p>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        &copy; Адалинская Тэя, ФБИ-24, 3 курc, 2024
+    </footer>
+</body>
+</html>

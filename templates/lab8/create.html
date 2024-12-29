@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать статью</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.jpeg') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lab5/lab5.css') }}">
+</head>
+<body>
+    <h1>Создать статью</h1>
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+    <form action="/lab8/article/create" method="POST">
+        <label>Название: <input type="text" name="title"></label><br>
+        <label>Текст статьи:</label><br>
+        <textarea name="article_text"></textarea><br>
+        <label><input type="checkbox" name="is_public"> Публичная</label><br>
+        <button type="submit">Создать</button>
+    </form>
+</body>
+</html>
