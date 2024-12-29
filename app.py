@@ -37,17 +37,18 @@ db.init_app(app)
 
 # Инициализация LoginManager
 login_manager = LoginManager()
-login_manager.init_app(app)
+
 
 # Укажите маршрут для перенаправления неавторизованных пользователей
-login_manager.login_view = 'lab8.main'
+login_manager.login_view = 'lab8.login'
+login_manager.init_app(app)
 
 # Обработчик для загрузки пользователя
 from db.models import users
 
 @login_manager.user_loader
-def load_user(user_id):
-    return users.query.get(int(user_id))
+def load_user(login_id):
+    return users.query.get(int(login_id))
 
 app.register_blueprint(lab1) 
 app.register_blueprint(lab2)
