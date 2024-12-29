@@ -72,9 +72,25 @@ def login():
                            error = 'Ошибка входа: логин и/или пароль неверны')
 
 
-@lab8.route('/lab8/article')
-def article_list():
-     return "список статей"
+@lab8.route('/lab8/article', methods=['GET', 'POST'])
+@login_required
+def list_articles():
+    status_message = None  
+
+    if request.method == 'POST':
+        article_id = request.form.get('article_id')
+        is_public = request.form.get('is_public') == 'on'
+
+        article = articles.query.filter_by(id=article_id, login_id=current_user.id).first()
+        if article:
+            article.is_public = is_public
+            db.session.commit()
+            status_message = f"Статус статьи «{article.title}» обновлен."
+        else:
+            status_message = "Ошибка: статья не найдена или недоступна."
+
+    user_articles = articles.query.filter_by(login_id=current_user.id).all()
+    return render_template('lab8/articles.html', articles=user_articles, status_message=status_message)
 
 
 @lab8.route('/lab8/logout/')
@@ -82,5 +98,75 @@ def article_list():
 def logout():
     logout_user()
     return redirect('/lab8/')
+
+
+@lab8.route('/lab8/article/create', methods=['GET', 'POST'])
+@login_required
+def create_article():
+    if request.method == 'GET':
+        return render_template('lab8/create.html')
+
+    title = request.form.get('title')
+    article_text = request.form.get('article_text')
+    is_public = request.form.get('is_public') == 'on'
+
+    if not title or not article_text:
+        return render_template('lab8/create.html', error = 'Название и текст статьи обязательны!')
+
+    new_article = articles(
+        login_id=current_user.id,
+        title=title,
+        article_text=article_text,
+        is_favorite=False,
+        is_public=is_public,
+        likes=0
+    )
+    db.session.add(new_article)
+    db.session.commit()
+    return redirect('/lab8/')
+
+
+@lab8.route('/lab8/article/edit/<int:article_id>', methods=['GET', 'POST'])
+@login_required
+def edit_article(article_id):
+    article = articles.query.filter_by(id=article_id, login_id=current_user.id).first()
+
+    if not article:
+        return redirect('/lab8/article')  
+
+    if request.method == 'POST':
+        title = request.form.get('title')
+        text = request.form.get('text')
+
+        if not title or not text:
+            return render_template(
+                'lab8/edit.html',
+                article=article,
+                error="Название и текст статьи не могут быть пустыми."
+            )
+
+        article.title = title
+        article.article_text = text
+        db.session.commit()
+        return redirect('/lab8/article')
+
+    return render_template('lab8/edit.html', article=article)
+
+
+@lab8.route('/lab8/article/delete/<int:article_id>', methods=['POST'])
+@login_required
+def delete_article(article_id):
+    article = articles.query.filter_by(id=article_id, login_id=current_user.id).first()
+
+    if not article:
+        return render_template(
+            'lab8/articles.html',
+            error='Ошибка: статья не найдена или недоступна.'
+        )
+
+    db.session.delete(article)
+    db.session.commit()
+    return redirect('/lab8/article')
+
 
 

@@ -1,18 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Список статей</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.jpeg') }}" type="image/x-icon">
-    <link rel="stylesheet" href="{{ url_for('static', filename='lab5/lab5.css') }}">
-</head>
-<body>
-    <h1>Список статей</h1>
-    <ul>
-        {% for article in articles %}
-            <li>{{ article.title }}</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+<link rel="icon" href="{{ url_for('static', filename='favicon.jpeg') }}" type="image/x-icon">
+<link rel="stylesheet" href="{{ url_for('static', filename='lab5/lab5.css') }}">
+<h1>Список статей</h1>
+<a href="/lab8/article/create">Создать статью</a>
+{% if status_message %}
+    <p style="color: green;">{{ status_message }}</p>
+{% endif %}
+<ul>
+    {% for article in articles %}
+        <li>
+            <strong>{{ article.title }}</strong>
+            <form method="POST" action="/lab8/article/delete/{{ article.id }}" style="display:inline;">
+                <button type="submit">Удалить</button>
+            </form>
+            <a href="/lab8/article/edit/{{ article.id }}">Редактировать</a>
+        </li>
+    {% endfor %}
+</ul>
