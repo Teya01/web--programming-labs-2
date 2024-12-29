@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, request, redirect
-from flask_login import current_user
+from flask import Blueprint, render_template,request, redirect, session
 from db import db
 from db.models import users, articles
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -9,9 +8,8 @@ lab8 = Blueprint('lab8', __name__)
 
 @lab8.route('/lab8/')
 def main():
-    login = 'anonymous'
+    login = current_user.login if current_user.is_authenticated else 'Anonymous'
     return render_template('lab8/index.html', login=login)
-
 
 @lab8.route('/lab8/register/', methods = ['GET', 'POST'])
 def register():
@@ -42,7 +40,6 @@ def register():
 
     login_user(new_user, remember=False)
     return redirect('/lab8/')
-
 
 @lab8.route('/lab8/login', methods = ['GET', 'POST'])
 def login():
@@ -140,7 +137,7 @@ def edit_article(article_id):
 
         if not title or not text:
             return render_template(
-                'lab8/edit.html',
+                'lab8/edit_article.html',
                 article=article,
                 error="Название и текст статьи не могут быть пустыми."
             )
@@ -159,14 +156,40 @@ def delete_article(article_id):
     article = articles.query.filter_by(id=article_id, login_id=current_user.id).first()
 
     if not article:
-        return render_template(
-            'lab8/articles.html',
-            error='Ошибка: статья не найдена или недоступна.'
-        )
+        return redirect('/lab8/article') 
 
     db.session.delete(article)
     db.session.commit()
     return redirect('/lab8/article')
 
+@lab8.route('/lab8/public')
+def public_articles():
+    public_articles = articles.query.filter_by(is_public=True).all()
+    return render_template('lab8/public_articles.html', articles=public_articles)
 
+
+@lab8.route('/lab8/search', methods=['GET', 'POST'])
+def search_articles():
+    if request.method == 'POST':
+        search_query = request.form.get('search_query', '').strip()
+
+        if not search_query:
+            return render_template('lab8/search.html', error='Введите строку для поиска.')
+
+        if current_user.is_authenticated:
+            results = articles.query.filter(
+                (articles.title.ilike(f'%{search_query}%')) |
+                (articles.article_text.ilike(f'%{search_query}%'))
+            ).filter(
+                (articles.login_id == current_user.id) | (articles.is_public == True)
+            ).all()
+        else:
+            results = articles.query.filter(
+                (articles.title.ilike(f'%{search_query}%')) |
+                (articles.article_text.ilike(f'%{search_query}%'))
+            ).filter(articles.is_public == True).all()
+
+        return render_template('lab8/search.html', articles=results, query=search_query)
+
+    return render_template('lab8/search.html')
 
